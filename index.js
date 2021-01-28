@@ -268,7 +268,7 @@ class Game {
         // Draw the falling piece.
         ctx.fillStyle = COLORS[this._droppingPiece.color - 1];
         ctx.strokeStyle = 'black';
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 0.5;
         ctx.beginPath();
         for (const coord of this._droppingPiece.data) {
             const x = (this._droppingPiece.position.x + coord.x) * CELL_SIZE;
@@ -305,6 +305,7 @@ class Game {
     
         ctx.save();
         ctx.translate(dx, dy);
+        ctx.lineWidth = 0.5;
         ctx.fillStyle = COLORS[this._nextPiece.color - 1];
         ctx.beginPath();
         for (const coord of this._nextPiece.data) {
