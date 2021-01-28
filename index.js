@@ -140,15 +140,40 @@ class Game {
     }
 
     _rotateAndCheck(shape, dir) {
-        for (let i = 0; i < shape.data.length; i += 1) {
-            const coord = shape.data[i];
-            const x = ((-dir) * coord.y) + shape.position.x;
-            const y = (dir * coord.x) + shape.position.y;
-            if (x < 0 || x >= GRID_WIDTH || y < 0 || y >= GRID_HEIGHT || this._lookupGrid(x, y) != 0) {
+        let testShape = {
+            data: shape.data.map(c => { return {...c}; }),
+            position: {...shape.position}
+        };
+        rotate(testShape, dir);
+        let [top, right, bottom, left] = measurePiece(testShape);
+        top += testShape.position.y;
+        right += testShape.position.x;
+        bottom += testShape.position.y;
+        left += testShape.position.x;
+        if (top < 0) {
+            testShape.position.y -= top;
+            top = 0;
+            bottom -= top;
+        }
+        if (left < 0) {
+            testShape.position.x -= left;
+            left = 0;
+            right -= left; 
+        } else if (right >= GRID_WIDTH) {
+            testShape.position.x -= (right - GRID_WIDTH) + 1;
+            right = GRID_WIDTH - 1;
+            left -= (right - GRID_WIDTH) + 1; 
+        }
+        for (let i = 0; i < testShape.data.length; i += 1) {
+            const coord = testShape.data[i];
+            const x = coord.x + testShape.position.x;
+            const y = coord.y + testShape.position.y;
+            if (y >= GRID_HEIGHT || this._lookupGrid(x, y) != 0) {
                 return false;
             }
         }
-        rotate(shape, dir);
+        shape.data = testShape.data;
+        shape.position = testShape.position;
         return true;
     }    
 
