@@ -9,6 +9,7 @@ const SHAPES = {
     'Z': [{x: -1, y: 0}, {x: 0, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}],
     'T': [{x: -1, y: 0}, {x: 0, y: 0}, {x: 1, y: 0}, {x: 0, y: 1}]  
 };
+
 const COLORS = ['#0FEBE3', '#05B6C5', '#F43086', '#FF89B4'];
 
 var game = null;
@@ -18,11 +19,8 @@ var shadowCtx = null;
 var nextShadowCtx = null;
 var gameOverScreen = null;
 
-var nextId = 0;
-
 class Game {
     constructor() {
-        this._id = nextId++;
         this._grid = Array.from({length: GRID_WIDTH * GRID_HEIGHT}).fill(0);
         this._clearedLines = 0;
         this._score = 0;
