@@ -269,22 +269,11 @@ class Game {
     
     _renderImpl(ctx, CELL_SIZE) {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.save();
-        
-        // Draw the falling piece.
-        ctx.fillStyle = COLORS[this._droppingPiece.color - 1];
-        ctx.strokeStyle = 'black';
-        ctx.lineWidth = 0.5;
-        ctx.beginPath();
-        for (const coord of this._droppingPiece.data) {
-            const x = (this._droppingPiece.position.x + coord.x) * CELL_SIZE;
-            const y = (this._droppingPiece.position.y + coord.y) * CELL_SIZE;
-            ctx.rect(x, y, CELL_SIZE, CELL_SIZE);
-        }
-        ctx.fill();
-        ctx.stroke();
     
         // Draw the grid.
+        ctx.save();
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 0.5;
         for (let y = 0; y < GRID_HEIGHT; y += 1) {
             for (let x = 0; x < GRID_WIDTH; x += 1) {
                 const cell = this._lookupGrid(x, y);
@@ -297,7 +286,46 @@ class Game {
                 }
             }
         }
-    
+        ctx.restore();
+
+        // Draw the shadow.
+        const shadow = {
+            ...this._droppingPiece,
+            position: {...this._droppingPiece.position}
+        };
+        while (!this._isPieceResting(shadow)) {
+            shadow.position.y += 1;
+        }
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+        ctx.globalAlpha = 0.2;
+        ctx.fillStyle = COLORS[this._droppingPiece.color - 1];
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = COLORS[this._droppingPiece.color - 1];
+        ctx.beginPath();
+        for (const coord of shadow.data) {
+            const x = (shadow.position.x + coord.x) * CELL_SIZE;
+            const y = (shadow.position.y + coord.y) * CELL_SIZE;
+            ctx.rect(x, y, CELL_SIZE, CELL_SIZE);
+        }
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+        ctx.globalCompositeOperation = 'normal';
+        ctx.restore();
+
+        // Draw the falling piece.
+        ctx.save();
+        ctx.fillStyle = COLORS[this._droppingPiece.color - 1];
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        for (const coord of this._droppingPiece.data) {
+            const x = (this._droppingPiece.position.x + coord.x) * CELL_SIZE;
+            const y = (this._droppingPiece.position.y + coord.y) * CELL_SIZE;
+            ctx.rect(x, y, CELL_SIZE, CELL_SIZE);
+        }
+        ctx.fill();
+        ctx.stroke();
         ctx.restore();
     }
 
