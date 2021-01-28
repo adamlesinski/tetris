@@ -360,29 +360,38 @@ function newPiece() {
     const shapeName = keys[Math.floor(Math.random() * keys.length)];
     let shape = {
         color: Math.floor(Math.random() * COLORS.length) + 1,
-        position: {x: Math.floor(GRID_WIDTH / 2), y: 3},
+        position: {x: Math.floor(GRID_WIDTH / 2), y: 0},
         data: SHAPES[shapeName].map(coord => { return {x: coord.x, y: coord.y}; }),
     };
     const rotations = Math.floor(Math.random() * 4);
     for (let i = 0; i < rotations; i += 1) {
         rotate(shape, 1);
     }
+    const [top, _right, _bottom, _left] = measurePiece(shape);
+    shape.position.y -= top;
     return shape;
 }
 
-function findPieceOrigin(piece, CELL_SIZE) {
+function measurePiece(piece) {
     let left = 100;
     let right = -100;
     let top = 100;
     let bottom = -100;
     for (const coord of piece.data) {
-        const x = coord.x * CELL_SIZE;
-        const y = coord.y * CELL_SIZE;
-        left = Math.min(left, x);
-        right = Math.max(right, x + CELL_SIZE);
-        top = Math.min(top, y);
-        bottom = Math.max(bottom, y + CELL_SIZE);
+        left = Math.min(left, coord.x);
+        right = Math.max(right, coord.x);
+        top = Math.min(top, coord.y);
+        bottom = Math.max(bottom, coord.y);
     }
+    return [top, right, bottom, left];
+}
+
+function findPieceOrigin(piece, CELL_SIZE) {
+    let [top, right, bottom, left] = measurePiece(piece);
+    top = top * CELL_SIZE;
+    right = (right + 1) * CELL_SIZE;
+    bottom = (bottom + 1) * CELL_SIZE;
+    left = left * CELL_SIZE;
     const width = right - left;
     const height = bottom - top;
     const originX = Math.floor(width * 0.5) + left;
