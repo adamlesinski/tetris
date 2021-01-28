@@ -34,8 +34,10 @@ class Game {
         this.handleInput = this.handleInput.bind(this);
         this.render = this.render.bind(this);
 
+        this._updateScores();
         window.addEventListener('keydown', this.handleInput);
         window.requestAnimationFrame(this.render);
+
         this._scheduleTick();
     }
 
@@ -86,6 +88,15 @@ class Game {
         gameOverScreen.classList.add('enabled');
         window.addEventListener('keydown', gameOverInputHandler);
         document.getElementById('play-again-btn').addEventListener('click', playAgain);
+    }
+
+    _updateScores() {
+        for (const span of document.querySelectorAll('.score-span')) {
+            span.textContent = this._score.toLocaleString();
+        }
+        for (const span of document.querySelectorAll('.level-span')) {
+            span.textContent = Math.floor(this._clearedLines / 10);
+        }
     }
 
     _commitAndSetupNewPiece() {
@@ -223,12 +234,7 @@ class Game {
         if (completedLines.length > 0) {
             this._clearedLines += completedLines.length;
             this._score += this._calculatePoints(completedLines.length);
-            for (const span of document.querySelectorAll('.score-span')) {
-                span.textContent = this._score.toLocaleString();
-            }
-            for (const span of document.querySelectorAll('.level-span')) {
-                span.textContent = Math.floor(this._clearedLines / 10);
-            }
+            this._updateScores();
 
             // Clear the completed lines
             let completedLine = completedLines.pop();
