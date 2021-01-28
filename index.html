@@ -5,11 +5,140 @@
 </head>
 <body>
     <style>
+        body {
+            box-sizing: border-box;
+            padding: 16px;
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            position: relative;
+        }
+        h2 {
+            color: grey;
+        }
+        button {
+            padding: 16px;
+            font-size: 14pt;
+            border: 1px solid white;
+            background: none;
+        }
+        button:hover {
+            background-image: linear-gradient(#dfafee, #FF89B4);
+        }
+        .shadow {
+            opacity: 15%;
+        }
+        .box {
+            width: 600px;
+            height: 600px;
+            position: relative;
+            perspective: 3000px;
+            transform-style: preserve-3d;
+            transform: rotate3d(-0.5, 1, 0, 20deg);
+            margin: auto;
+        }
+        .box-bottom {
+            width: inherit;
+            height: inherit;
+            position: absolute;
+            transform: translate3d(0, 0, 300px) rotateX(-90deg) translate3d(0, 0, 300px);
+        }
+        .box-front {
+            width: inherit;
+            height: inherit;
+            position: absolute;
+            border-bottom: solid black;
+        }
+        .game-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 2fr 1fr 2fr;
+            grid-template-areas:
+                "canvas score"
+                "canvas space"
+                "canvas next";
+        }
+        .game-container .score {
+            grid-area: score;
+            padding: 16px;
+        }
+        .game-container .canvas {
+            grid-area: canvas;
+        }
+        .game-container .next {
+            grid-area: next;
+            padding: 16px;
+        }
         #canvas {
-            border: solid;
+            border-left: 1px solid grey;
+            border-right: 1px solid grey;
+        }
+        p {
+            font-size: 16pt;
+        }
+        .fullscreen-overlay {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: linear-gradient(#0FEBE3EE, #FF89B4EE);
+            visibility: hidden;
+            opacity: 0%;
+            transition: opacity 1s, visibility 0s linear 1s;
+        }
+        .fullscreen-overlay.enabled {
+            visibility: visible;
+            opacity: 100%;
+            transition: opacity 1s, visibility 0s linear 0s;
+        }
+        .dialog {
+            text-align: center;
         }
     </style>
-    <canvas id="canvas" width="300" height="600"></canvas>
+    <div class="box">
+        <div class="box-bottom shadow">
+            <div class="game-container">
+                <canvas id="shadow" class="canvas" width="300" height="600"></canvas>
+                <div class="score">
+                    <p>Score: <span class="score-span">0</span></p>
+                    <p>Level: <span class="level-span">0</span></p>
+                </div>
+                <div class="next">
+                    <p>Next piece:</p>
+                    <canvas id="next-shadow" width="120" height="120"></canvas>
+                </div>
+                
+            </div>
+        </div>
+        <div class="box-front">
+            <div class="game-container">
+                <canvas id="canvas" class="canvas" width="300" height="600"></canvas>
+                <div class="score">
+                    <p>Score: <span class="score-span">0</span></p>
+                    <p>Level: <span class="level-span">0</span></p>
+                </div>
+                <div class="next">
+                    <p>Next piece:</p>
+                    <canvas id="next" width="120" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="game-over-screen" class="fullscreen-overlay disabled">
+        <div class="dialog">
+            <h1>Game Over</h1>
+            <h2>Your score was <span id="game-over-score"></span></h2>
+            <button id="play-again-btn">Play again</button>
+        </div>
+    </div>
+    <div id="start-screen" class="fullscreen-overlay enabled">
+        <div class="dialog">
+            <h1>Ready to play Tetris?</h1>
+            <button id="start-btn">Let's go!</button>
+        </div>
+    </div>
     <script src="index.js" type="text/javascript"></script>
 </body>
 </html>
