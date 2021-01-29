@@ -13,16 +13,29 @@
             height: 100vh;
             font-family: Verdana, Geneva, Tahoma, sans-serif;
             position: relative;
+            background: white;
+            color: black;
+        }
+        body.dark {
+            background: black;
+            color: white;
         }
         h2 {
             color: grey;
             text-shadow: 1px 1px 3px white;
+        }
+        body.dark h2 {
+            text-shadow: 1px 1px 3px black;
         }
         button {
             padding: 16px;
             font-size: 14pt;
             border: 1px solid white;
             background: none;
+        }
+        body.dark button {
+            border-color: black;
+            color: white;
         }
         button:hover {
             background-image: linear-gradient(#dfafee, #FF89B4);
@@ -77,6 +90,10 @@
             border-left: 1px solid #e0e0e0;
             border-right: 1px solid #e0e0e0;
         }
+        body.dark #canvas {
+            border-left: 1px solid #4e4e4e;
+            border-right: 1px solid #4e4e4e;
+        }
         p {
             font-size: 16pt;
         }
@@ -94,6 +111,9 @@
             opacity: 0%;
             transition: opacity 1s, visibility 0s linear 1s;
         }
+        body.dark .fullscreen-overlay {
+            background-image: linear-gradient(#0af0e8f8, #7A002D);
+        }
         .fullscreen-overlay.enabled {
             visibility: visible;
             opacity: 100%;
@@ -101,6 +121,9 @@
         }
         #start-screen.fullscreen-overlay {
             background-image: linear-gradient(#0FEBE3, #FF89B4);
+        }
+        body.dark #start-screen.fullscreen-overlay {
+            background-image: linear-gradient(#0af0e8, #7A002D);
         }
         .dialog {
             text-align: center;
@@ -117,7 +140,75 @@
         .down-arrow {
             transform: rotate(-90deg);
         }
+        .controls {
+            display: flex;
+            justify-content: flex-end;
+        }
+        #toggle-theme {
+            font-size: 12pt;
+            padding: 8px;
+            border-color: black;
+            color: black;
+        }
+        body.dark #toggle-theme {
+            border-color: white;
+            color: white;
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: black;
+                color: white;
+            }
+            body.light {
+                background: white;
+                color: black;
+            }
+            #canvas {
+                border-left: 1px solid #4e4e4e;
+                border-right: 1px solid #4e4e4e;
+            }
+            body.light #canvas {
+                border-left: 1px solid #e0e0e0;
+                border-right: 1px solid #e0e0e0;
+            }
+            button {
+                border-color: black;
+                color: white;
+            }
+            body.light button {
+                border: 1px solid white;
+            }
+            .fullscreen-overlay {
+                background-image: linear-gradient(#0af0e8f8, #7A002D);
+            }
+            body.light .fullscreen-overlay {
+                background-image: linear-gradient(#0FEBE3EE, #FF89B4);
+            }
+            #start-screen.fullscreen-overlay {
+                background-image: linear-gradient(#0af0e8, #7A002D);
+            }
+            body.light #start-screen.fullscreen-overlay {
+                background-image: linear-gradient(#0FEBE3, #FF89B4);
+            }
+            h2 {
+                text-shadow: 1px 1px 3px black;
+            }
+            body.light h2 {
+                text-shadow: 1px 1px 3px white;
+            }
+            #toggle-theme {
+                border-color: white;
+                color: white;
+            }
+            body.light #toggle-theme {
+                border-color: black;
+                color: black;
+            }
+        }
     </style>
+    <div class="controls">
+        <button id="toggle-theme">Toggle theme</button>
+    </div>
     <div class="box">
         <div class="box-bottom shadow">
             <div class="game-container">

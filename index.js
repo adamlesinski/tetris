@@ -7,7 +7,7 @@ const SHAPES = {
     'I': [{x: -1, y: 0}, {x: 0, y: 0}, {x: 1, y: 0}, {x: 2, y: 0}],
     'S': [{x: 0, y: 0}, {x: 1, y: 0}, {x: -1, y: 1}, {x: 0, y: 1}],
     'Z': [{x: -1, y: 0}, {x: 0, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}],
-    'T': [{x: -1, y: 0}, {x: 0, y: 0}, {x: 1, y: 0}, {x: 0, y: 1}]  
+    'T': [{x: -1, y: 0}, {x: 0, y: 0}, {x: 1, y: 0}, {x: 0, y: 1}],
 };
 
 const COLORS = ['#0FEBE3', '#05B6C5', '#F43086', '#FF89B4'];
@@ -470,6 +470,21 @@ function setup() {
         startScreen.classList.remove('enabled');
         startScreen.classList.add('disabled');
         game = new Game();
+    });
+    document.getElementById('toggle-theme').addEventListener('click', () => {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = (prefersDark && !document.body.classList.contains('light')) || document.body.classList.contains('dark');
+        if (isDark) {
+            document.body.classList.remove('dark');
+            if (prefersDark) {
+                document.body.classList.add('light');
+            }
+        } else {
+            document.body.classList.remove('light');
+            if (!prefersDark) {
+                document.body.classList.add('dark');
+            }
+        }
     });
 }
 
